@@ -1,0 +1,14 @@
+# Archivos locales y credenciales
+.env
+.env.*
+!.env.example
+/vendor/
+/node_modules/
+/database/*.sqlite
+/bootstrap/cache/*.php
+/storage/logs/*.log
+/storage/framework/cache/**
+/storage/framework/sessions/**
+/storage/framework/views/**
+/public/build/
+.phpunit.result.cache

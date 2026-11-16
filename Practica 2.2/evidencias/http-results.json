@@ -1,0 +1,48 @@
+[
+  {
+    "status": 201,
+    "case": "P1",
+    "response": {
+      "data": {
+        "id": "01a1ddac-12a3-7760-bd85-8497cc52f1c2",
+        "course_id": "01a1ddac-0519-715c-8617-8f3be153372f",
+        "enrolled_at": "2026-11-15T05:26:44Z",
+        "cohort_id": "01a1ddac-0534-7581-b054-a2bd4e2175c3"
+      }
+    },
+    "request": {
+      "course_slug": "prompting-para-docentes",
+      "cohort_code": "ILIA-DEMO"
+    }
+  },
+  {
+    "status": 422,
+    "case": "P2",
+    "response": {
+      "message": "The course slug field is required.",
+      "errors": {
+        "course_slug": [
+          "The course slug field is required."
+        ]
+      }
+    },
+    "request": {
+      "cohort_code": "ILIA-DEMO"
+    }
+  },
+  {
+    "status": 422,
+    "case": "P3",
+    "response": {
+      "message": "The course slug field must be a string.",
+      "errors": {
+        "course_slug": [
+          "The course slug field must be a string."
+        ]
+      }
+    },
+    "request": {
+      "course_slug": 42
+    }
+  }
+]

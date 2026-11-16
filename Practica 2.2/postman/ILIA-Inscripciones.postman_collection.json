@@ -1,0 +1,93 @@
+{
+  "info": {
+    "name": "ILIA — Contrato de inscripción",
+    "description": "Casos de la Práctica 2.2. Configura las variables base_url y token antes de enviar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "token", "value": "" },
+    { "key": "enrollment_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "P1 — Inscripción válida (201 primera vez, 200 repetida)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "body": { "mode": "raw", "raw": "{\n  \"course_slug\": \"prompting-para-docentes\",\n  \"cohort_code\": \"ILIA-DEMO\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": "{{base_url}}/api/enrollments"
+      }
+    },
+    {
+      "name": "P2 — Falta campo obligatorio (422)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "body": { "mode": "raw", "raw": "{\n  \"cohort_code\": \"ILIA-DEMO\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": "{{base_url}}/api/enrollments"
+      }
+    },
+    {
+      "name": "P3 — Tipo incorrecto (422)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "body": { "mode": "raw", "raw": "{\n  \"course_slug\": 42\n}", "options": { "raw": { "language": "json" } } },
+        "url": "{{base_url}}/api/enrollments"
+      }
+    },
+    {
+      "name": "CRUD — Listar mis inscripciones (200)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "url": "{{base_url}}/api/enrollments"
+      }
+    },
+    {
+      "name": "CRUD — Consultar inscripción propia (200)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "url": "{{base_url}}/api/enrollments/{{enrollment_id}}"
+      }
+    },
+    {
+      "name": "CRUD — Actualizar inscripción (PATCH 200)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "body": { "mode": "raw", "raw": "{\n  \"cohort_code\": null\n}", "options": { "raw": { "language": "json" } } },
+        "url": "{{base_url}}/api/enrollments/{{enrollment_id}}"
+      }
+    },
+    {
+      "name": "CRUD — Eliminar inscripción propia (204)",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "url": "{{base_url}}/api/enrollments/{{enrollment_id}}"
+      }
+    }
+  ]
+}
