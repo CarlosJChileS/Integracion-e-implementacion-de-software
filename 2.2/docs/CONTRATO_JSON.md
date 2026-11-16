@@ -149,3 +149,14 @@ También se verifica autenticación, cohorte omitida/null, cohorte inexistente e
 3. **¿Cómo verifiqué que funciona?** Ejecuté las pruebas automatizadas y envié solicitudes HTTP al servidor Laravel local. La solicitud válida recibió 201; al omitir `course_slug` o enviarlo como número, el servidor devolvió 422 y no guardó una inscripción inválida.
 
 Este texto está preparado con los resultados comprobables de la implementación. Revísalo y ajústalo con tus propias palabras antes de entregar la actividad individual.
+
+## Implementación de referencia
+
+El contrato se materializa en el proyecto Laravel de la raíz:
+
+- DTO de entrada: [`EnrollCourseData`](../../app/Data/Enrollment/EnrollCourseData.php).
+- Validación: [`StoreEnrollmentRequest`](../../app/Http/Requests/StoreEnrollmentRequest.php) y [`UpdateEnrollmentRequest`](../../app/Http/Requests/UpdateEnrollmentRequest.php).
+- Flujo HTTP: [`EnrollmentController`](../../app/Http/Controllers/Api/EnrollmentController.php) y [`routes/api.php`](../../routes/api.php).
+- Reglas y persistencia: [`EnrollmentService`](../../app/Services/EnrollmentService.php).
+- JSON de salida: [`EnrollmentResource`](../../app/Http/Resources/EnrollmentResource.php).
+- Verificación automatizada: [`EnrollmentContractTest`](../../tests/Feature/EnrollmentContractTest.php).
