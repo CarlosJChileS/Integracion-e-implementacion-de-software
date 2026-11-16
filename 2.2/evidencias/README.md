@@ -1,6 +1,6 @@
 # Evidencias de pruebas
 
-Ejecuta `php artisan test` desde la raíz del proyecto. PHPUnit usa SQLite en memoria, así que cada caso empieza sin inscripciones y los datos de prueba no alteran la base local. Las tres imágenes siguientes muestran las respuestas HTTP reales obtenidas contra el servidor local; el token de prueba no aparece en ellas.
+Ejecuta `php artisan test` desde la raíz del proyecto. PHPUnit usa SQLite en memoria, así que cada caso empieza sin inscripciones y los datos de prueba no alteran la base local. La instancia desplegada en Ubuntu usa PostgreSQL; las credenciales y el token temporal se omiten de las evidencias y del repositorio.
 
 ## Resultados automatizados
 
@@ -12,7 +12,7 @@ Ejecuta `php artisan test` desde la raíz del proyecto. PHPUnit usa SQLite en me
 
 Los tres casos están implementados como pruebas de integración en `tests/Feature/EnrollmentContractTest.php`. La misma suite cubre CRUD autenticado, aislamiento por usuario, actualización parcial, eliminación e idempotencia. Para repetirlos desde Postman, importa `postman/ILIA-Inscripciones.postman_collection.json`, configura `base_url` y un token ficticio, y ejecuta las solicitudes P1/P2/P3 y los ejemplos CRUD. Para consultar, actualizar o eliminar, configura también `enrollment_id` con un identificador propio devuelto por la API. No se incluye un token en el repositorio.
 
-En la verificación de esta versión, `php artisan test` aprobó **16 pruebas y 65 aserciones** con SQLite en memoria. Pint y la validación JSON de la colección Postman también finalizaron correctamente.
+En la verificación automatizada, `php artisan test` aprobó **16 pruebas y 65 aserciones** con SQLite en memoria. En la VM Ubuntu, Laravel confirmó conexión `pgsql` a PostgreSQL 18.6 y las siete migraciones quedaron aplicadas. Una solicitud autenticada real `POST /api/enrollments` devolvió HTTP 201 con JSON `data`; el `DELETE` devolvió HTTP 204 y la petición sin token devolvió HTTP 401 JSON. El registro de prueba y su token se eliminaron después de la verificación.
 
 ## Capturas
 

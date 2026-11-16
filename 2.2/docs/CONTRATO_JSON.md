@@ -13,7 +13,7 @@
 - **Backend:** API Laravel de esta práctica.
 - **Identidad:** se obtiene del token Bearer. El cliente no envía `user_id` en el cuerpo; así se conserva la decisión del backend de ILIA.
 - **Transporte:** HTTP síncrono con JSON (`Content-Type: application/json`, `Accept: application/json`).
-- **Persistencia:** una inscripción válida se guarda en SQLite. La pareja docente/curso es única; repetir el mismo POST devuelve el recurso existente con HTTP 200.
+- **Persistencia:** una inscripción válida se guarda en PostgreSQL en la VM Ubuntu. La pareja docente/curso es única; repetir el mismo POST devuelve el recurso existente con HTTP 200.
 
 ## Solicitud
 
@@ -50,7 +50,7 @@
 | `data.enrolled_at` | string (fecha/hora ISO 8601) | Sí | Instante UTC en que se creó la inscripción. |
 | `data.cohort_id` | string (UUID) o null | Sí | Cohorte asociada; `null` cuando no se indicó una. |
 
-Los UUID y la fecha del ejemplo son ilustrativos: las respuestas reales contienen los valores generados por la base local.
+Los UUID y la fecha del ejemplo son ilustrativos: las respuestas reales contienen los valores generados por PostgreSQL.
 
 En conjunto, los dos contratos describen seis campos de negocio: dos en la solicitud y cuatro en `data` en la respuesta.
 
@@ -91,7 +91,7 @@ flowchart LR
     R --> V[Form Request]
     V -->|datos validados| CT[Controller]
     CT -->|DTO| S[EnrollmentService]
-    S -->|Eloquent| DB[(SQLite local)]
+    S -->|Eloquent| DB[(PostgreSQL en VM Ubuntu)]
     DB --> S
     S --> CT
     CT --> RS[EnrollmentResource]
@@ -100,9 +100,9 @@ flowchart LR
 
 - **Heterogeneidad e interoperabilidad:** clientes web o móviles pueden estar escritos con otras tecnologías; JSON sobre HTTP define el formato y protocolo compartidos.
 - **Acoplamiento y cohesión:** cada clase tiene una responsabilidad concreta. Los clientes dependen del contrato estable, no de los modelos Eloquent ni del esquema de almacenamiento.
-- **Arquitectura distribuida:** el cliente y la API se comunican mediante solicitud y respuesta de red; esta versión usa un solo backend central y una base local SQLite.
+- **Arquitectura distribuida:** el cliente y la API se comunican mediante solicitud y respuesta de red; Laravel y PostgreSQL residen en la VM, mientras el anfitrión consume la API por el puerto reenviado 8080.
 - **Integración en la capa de datos:** el backend Laravel media todo acceso a persistencia. Ningún cliente accede directamente a la base de datos. Las claves foráneas y la restricción única protegen las relaciones y evitan inscripciones duplicadas.
-- **Fase siguiente:** reemplazar SQLite por PostgreSQL en una VM Ubuntu, configurar acceso de red y probar migraciones y CRUD desde otro equipo. Esta conexión no forma parte de la versión actual.
+- **Conexión verificada:** PostgreSQL 18.6 escucha localmente dentro de la VM en `127.0.0.1:5432`. Laravel usa la base `backend_api`; la API se publica al anfitrión mediante `http://127.0.0.1:8080`, con autenticación Bearer de Sanctum.
 
 ## Flujo
 
@@ -114,7 +114,7 @@ sequenceDiagram
     participant D as DTO EnrollCourseData
     participant CT as EnrollmentController
     participant S as EnrollmentService
-    participant DB as SQLite
+    participant DB as PostgreSQL en la VM
     C->>A: POST JSON + Bearer token
     A->>V: Deserializa y valida
     alt Contrato inválido
@@ -132,7 +132,7 @@ sequenceDiagram
 
 ## Pruebas mínimas de la guía
 
-La automatización PHPUnit reproduce estos casos con una base SQLite en memoria. Las respuestas observadas se guardan en [`../evidencias/README.md`](../evidencias/README.md).
+La automatización PHPUnit reproduce estos casos con una base SQLite en memoria para aislar cada prueba. Además, la instancia de la VM se verificó contra PostgreSQL con una solicitud HTTP autenticada. Los resultados se detallan en [`../evidencias/README.md`](../evidencias/README.md).
 
 | Caso | Entrada | Resultado esperado | Resultado verificado |
 |---|---|---|---|

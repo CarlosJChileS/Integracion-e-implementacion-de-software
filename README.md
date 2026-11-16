@@ -17,7 +17,9 @@ Cada carpeta explica cómo su tema prepara el siguiente. La implementación com�
 
 ## Proyecto Laravel (raíz)
 
-API de inscripción a cursos del proyecto ILIA. Usa Laravel 13, PHP 8.3 o superior y SQLite en esta versión local. La carpeta `2.2` documenta la práctica correspondiente; el código no está duplicado dentro de ella.
+API de inscripción a cursos del proyecto ILIA. Usa Laravel 13 y PHP 8.3 o superior. El archivo `.env.example` conserva SQLite para una ejecución local sencilla; la instancia desplegada en la VM Ubuntu utiliza PostgreSQL. La carpeta `2.2` documenta la práctica correspondiente; el código no está duplicado dentro de ella.
+
+### Ejecución local con SQLite
 
 ```powershell
 composer install
@@ -27,6 +29,15 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-La API queda en `http://127.0.0.1:8000`. Ejecuta las pruebas desde la raíz con `php artisan test`. Para probar peticiones, importa `2.2/postman/ILIA-Inscripciones.postman_collection.json`.
+La API local queda en `http://127.0.0.1:8000`. Ejecuta las pruebas desde la raíz con `php artisan test`. Para probar peticiones, importa `2.2/postman/ILIA-Inscripciones.postman_collection.json`.
 
-La conexión PostgreSQL de la actividad 2.1 se documenta con sus materiales y evidencias en `2.1`. Esta copia del proyecto conserva SQLite como motor ejecutable mientras se completa y verifica la conexión de la VM Ubuntu.
+### VM Ubuntu y PostgreSQL
+
+La VM `Integracion Ubuntu PostgreSQL` ejecuta una copia de este mismo repositorio, Laravel y PostgreSQL 18.6. La aplicación se inicia automáticamente con el servicio `laravel-integracion`; PostgreSQL conserva la base `backend_api` y Laravel se conecta mediante `127.0.0.1:5432` dentro de la VM. El acceso desde el equipo anfitrión usa estos puertos reenviados por VirtualBox:
+
+- API: `http://127.0.0.1:8080` (puerto 8000 del invitado).
+- SSH: `ssh -p 2224 carlo@127.0.0.1`.
+
+La cuenta de PostgreSQL es `laravel_app`. Las contraseñas se entregan por separado y no se guardan en este repositorio. Para consultar el estado de los servicios dentro de Ubuntu, usa `sudo systemctl status laravel-integracion postgresql`.
+
+La conexión Laravel–PostgreSQL se preparó con `composer install`, `php artisan migrate --seed --force` y se comprobó con `php artisan db:show --counts`. La práctica 2.1 reúne la arquitectura y sus evidencias; la práctica 2.2 documenta el contrato JSON y sus validaciones.
