@@ -1,14 +1,14 @@
 # Evidencias de pruebas – Práctica 2.3
 
-La suite de Laravel verifica el traductor por HTTP con la base SQLite de prueba en memoria. En la VM, el mismo endpoint se puede contrastar con PostgreSQL y el catálogo de ILIA. Las solicitudes de los ejemplos son ficticias; no contienen credenciales ni tokens reales.
+La suite de Laravel verifica el traductor por HTTP con SQLite de prueba en memoria. Además, se enviaron los tres casos por HTTP a la instancia de Laravel conectada a PostgreSQL 18.6 en la VM, usando el catálogo de ILIA. El token temporal empleado para P1–P3 se revocó al terminar; no se conserva en el repositorio.
 
 ## Casos mínimos de la guía
 
 | Caso | Entrada | Resultado esperado y verificado |
 |---|---|---|
-| P1 – Origen A válido | `source: legacy`, `codigo_curso: " PROMPTING-PARA-DOCENTES "`, `codigo_paralelo: " ilia-demo "` | HTTP 200; `data` contiene `course_slug: "prompting-para-docentes"` y `cohort_code: "ILIA-DEMO"`. |
-| P2 – Origen B equivalente | `source: portal`, `course.slug: "prompting-para-docentes"`, `cohort.code: "ILIA-DEMO"` | HTTP 200; mismo objeto `data` y mismos tipos que P1. |
-| P3 – Campo obligatorio ausente | `source: legacy`, falta `codigo_curso` | HTTP 422; JSON `errors` identifica `codigo_curso`; no se crea inscripción. |
+| P1 – Origen A válido | `source: legacy`, `codigo_curso: " PROMPTING-PARA-DOCENTES "`, `codigo_paralelo: " ilia-demo "` | VM PostgreSQL: HTTP 200; `data` contiene `course_slug: "prompting-para-docentes"` y `cohort_code: "ILIA-DEMO"`. |
+| P2 – Origen B equivalente | `source: portal`, `course.slug: "prompting-para-docentes"`, `cohort.code: "ILIA-DEMO"` | VM PostgreSQL: HTTP 200; mismo objeto `data` y mismos tipos que P1. |
+| P3 – Campo obligatorio ausente | `source: legacy`, falta `codigo_curso` | VM PostgreSQL: HTTP 422; JSON `errors` identifica `codigo_curso`; no se crea inscripción. |
 
 ## Solicitudes y respuestas
 
@@ -62,24 +62,27 @@ Entrada:
 }
 ```
 
-Respuesta esperada:
+Respuesta observada en la VM:
 
 ```json
 {
-  "message": "The given data was invalid.",
+  "message": "El código del curso es obligatorio.",
   "errors": {
-    "codigo_curso": ["El código del curso es obligatorio."]
+    "codigo_curso": [
+      "El código del curso es obligatorio."
+    ]
   }
 }
 ```
 
-Laravel puede incluir campos adicionales de contexto en el error; la aserción confirma el código HTTP 422 y el error asociado a `codigo_curso`.
+La respuesta real se obtuvo con HTTP 422. La prueba automatizada confirma además el error asociado a `codigo_curso` y que no se crea una inscripción.
 
 ## Resultados automatizados
 
 - `php artisan test --filter=EnrollmentPayloadTranslatorTest`: **5 pruebas aprobadas, 24 aserciones**.
 - `php artisan test`: **21 pruebas aprobadas, 89 aserciones**.
 - Pint `--test` sobre traductor, request, controlador, ruta y pruebas: **aprobado**.
+- Solicitudes reales contra la VM PostgreSQL: P1 HTTP 200, P2 HTTP 200, P3 HTTP 422; tras revocar el token temporal, el mismo endpoint respondió HTTP 401.
 
 La cobertura incluye equivalencia P1/P2, normalización de espacios y mayúsculas, cohorte omitida convertida a `null`, rechazo de campos faltantes o no textuales, referencias inexistentes, claves ambiguas y requisito de autenticación. La suite anterior de la API se conserva.
 
