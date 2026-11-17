@@ -1,0 +1,96 @@
+---
+kind: postman-cli-collection-run-executions
+schemaVersion: 1
+runId: 52b364f4-8b52-4aa0-af1e-0b2b8bda8d19
+summaryFile: pr-ctica-3-3-orquestaci-n-y-composici-n-de-capac-2026-11-17-09-06-46.collection-run-summary.yaml
+collection:
+  id: 0e5f01f3-f083-4b2e-a2b4-df9b88252033
+  name: Práctica 3.3 - Orquestación y composición de capacidades
+generatedAt: '2026-11-17T14:06:46.719Z'
+---
+iteration: 0
+cursorRef: 9d5e3bd3-91d1-4e84-9adb-deb105041036
+item:
+  id: a61d6e6b-69ef-49b5-bcab-f94e5634ea8e
+  name: Flujo normal
+  folders:
+    - Orquestador
+    - Flujo normal
+  fullName: Orquestador / Flujo normal
+  parent:
+    id: 91534f6b-9129-4b4b-b8b2-a03dbb42cafd
+    name: Orquestador
+    folders:
+      - Orquestador
+request:
+  method: GET
+  url:
+    protocol: http
+    port: '8000'
+    path:
+      - api
+      - resumen-solicitud
+      - '101'
+    host:
+      - '127'
+      - '0'
+      - '0'
+      - '1'
+    query: []
+    variable: []
+  headers:
+    - key: X-Correlation-ID
+      value: practica33-postman-01
+    - key: User-Agent
+      value: PostmanRuntime/7.56.2
+      system: true
+    - key: Accept
+      value: '*/*'
+      system: true
+    - key: Cache-Control
+      value: no-cache
+      system: true
+    - key: Postman-Token
+      value: 7ab9dd4b-2100-47bd-a51c-11f6e97a5679
+      system: true
+    - key: Host
+      value: 127.0.0.1:8000
+      system: true
+    - key: Accept-Encoding
+      value: gzip, deflate, br
+      system: true
+    - key: Connection
+      value: keep-alive
+      system: true
+response:
+  id: f9e4ef06-ea2c-491c-8427-8991c1e1a581
+  code: 200
+  status: OK
+  responseTime: 546
+  responseSize: 116
+  headers:
+    - key: Host
+      value: 127.0.0.1:8000
+    - key: Connection
+      value: close
+    - key: X-Powered-By
+      value: PHP/8.4.0
+    - key: Cache-Control
+      value: no-cache, private
+    - key: Date
+      value: Tue, 17 Nov 2026 14:06:47 GMT
+    - key: Content-Type
+      value: application/json
+    - key: X-Correlation-ID
+      value: practica33-postman-01
+    - key: Access-Control-Allow-Origin
+      value: '*'
+  body: '{"solicitud_id":101,"usuario":{"id":7,"nombre":"Ana"},"estado":"pendiente","correlation_id":"practica33-postman-01"}'
+tests:
+  - name: HTTP 200
+    status: passed
+  - name: Resumen unificado
+    status: passed
+  - name: ID correlacionado en cuerpo y cabecera
+    status: passed
+errors: []

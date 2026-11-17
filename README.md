@@ -13,6 +13,7 @@ Repositorio organizado siguiendo la secuencia de contenidos de la asignatura. Lo
 | [`2.1`](2.1/README.md) | Integración en la capa de datos | Migraciones, persistencia y material de arquitectura/conectividad. |
 | [`2.2`](2.2/README.md) | DTO y contratos de intercambio JSON | Guía, informe, contrato, colección Postman y evidencias de la práctica. |
 | [`2.3`](2.3/README.md) | Patrones de traducción y normalización | Adaptador individual de Carlos Chile para convertir dos formatos de inscripción al DTO común. |
+| [`3.1`](3.1/README.md) | Gestión de estado y actualización en tiempo real | App Expo con Context compartido, formulario, lista y contador; distingue estado local de sincronización entre dispositivos. |
 | [`3.3`](3.3/README.md) | Orquestación y composición de capacidades | Servicios HTTP locales de usuarios/estados, resumen Laravel, correlación y manejo de fallos. |
 
 Cada carpeta explica cómo su tema prepara el siguiente. La implementación común se mantiene en este directorio raíz para que las prácticas puedan referirse al mismo sistema.
@@ -44,6 +45,10 @@ La cuenta de PostgreSQL es `laravel_app`. Las contraseñas se entregan por separ
 
 La conexión Laravel–PostgreSQL se preparó con `composer install`, `php artisan migrate --seed --force` y se comprobó con `php artisan db:show --counts`. La práctica 2.1 reúne la arquitectura y sus evidencias; la práctica 2.2 documenta el contrato JSON y sus validaciones; la 2.3 incorpora el traductor de estructuras de inscripción.
 
+
+### Prácticas 3.1 y 3.3
+
+La aplicación Expo de la práctica [3.1](3.1/README.md) está separada del backend Laravel. Iníciala desde `3.1/app` con `npm install` y `npx expo start` (o `npx expo start --web`). Demuestra estado compartido en memoria entre formulario, lista y contadores.
 
 ### Práctica 3.3
 

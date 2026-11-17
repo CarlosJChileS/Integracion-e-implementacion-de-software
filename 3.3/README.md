@@ -109,7 +109,9 @@ La suite específica cubre composición y equivalencia de ID en ambas llamadas, 
 
 ## Evidencias
 
-Las capturas y los registros de respuesta observados en la ejecución están en `evidencias/`. La colección de Postman incluye pruebas automáticas para éxito y caída del servicio.
+Los informes de ejecución del Postman CLI están en [`evidencias/postman/`](evidencias/postman/). Para repetir la prueba exitosa y el fallo, mantén activos los servicios de usuarios y el orquestador; detén el proceso del servicio de estados solo antes de ejecutar `Fallo servicio de estados`.
+
+Las capturas y los registros de respuesta HTTP están en `evidencias/`. Los informes YAML de Postman CLI registran los casos reproducidos y sus assertions.
 
 ## Código y repositorio
 

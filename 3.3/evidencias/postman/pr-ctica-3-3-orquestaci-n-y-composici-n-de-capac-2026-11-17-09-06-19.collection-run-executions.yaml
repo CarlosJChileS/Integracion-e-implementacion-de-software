@@ -1,0 +1,161 @@
+---
+kind: postman-cli-collection-run-executions
+schemaVersion: 1
+runId: bbb7d352-4e60-4281-9b3a-2ce0562e4926
+summaryFile: pr-ctica-3-3-orquestaci-n-y-composici-n-de-capac-2026-11-17-09-06-19.collection-run-summary.yaml
+collection:
+  id: 0e5f01f3-f083-4b2e-a2b4-df9b88252033
+  name: Práctica 3.3 - Orquestación y composición de capacidades
+generatedAt: '2026-11-17T14:06:19.637Z'
+---
+iteration: 0
+cursorRef: 9e24ed74-a354-488a-bb11-e1b847681ca6
+item:
+  id: 5e370fc7-4936-4a48-9666-728857ebc38e
+  name: Servicio usuarios 7
+  folders:
+    - Servicios de prueba
+    - Servicio usuarios 7
+  fullName: Servicios de prueba / Servicio usuarios 7
+  parent:
+    id: a076b1d5-8de6-45a0-b11c-b3fb3e91b4ee
+    name: Servicios de prueba
+    folders:
+      - Servicios de prueba
+request:
+  method: GET
+  url:
+    protocol: http
+    port: '8091'
+    path:
+      - usuarios
+      - '7'
+    host:
+      - '127'
+      - '0'
+      - '0'
+      - '1'
+    query: []
+    variable: []
+  headers:
+    - key: User-Agent
+      value: PostmanRuntime/7.56.2
+      system: true
+    - key: Accept
+      value: '*/*'
+      system: true
+    - key: Cache-Control
+      value: no-cache
+      system: true
+    - key: Postman-Token
+      value: d02e7fef-770b-4cb6-bce1-46ddfdf3024e
+      system: true
+    - key: Host
+      value: 127.0.0.1:8091
+      system: true
+    - key: Accept-Encoding
+      value: gzip, deflate, br
+      system: true
+    - key: Connection
+      value: keep-alive
+      system: true
+response:
+  id: 7bbd4b45-70c6-4a35-a461-e77994c56a03
+  code: 200
+  status: OK
+  responseTime: 16
+  responseSize: 23
+  headers:
+    - key: Host
+      value: 127.0.0.1:8091
+    - key: Date
+      value: Tue, 17 Nov 2026 14:06:19 GMT
+    - key: Connection
+      value: close
+    - key: X-Powered-By
+      value: PHP/8.4.0
+    - key: Content-Type
+      value: application/json; charset=utf-8
+  body: '{"id":7,"nombre":"Ana"}'
+tests:
+  - name: HTTP 200
+    status: passed
+  - name: JSON de Ana
+    status: passed
+errors: []
+---
+iteration: 0
+cursorRef: 850039d1-51ad-4f0a-a898-839fd81a7ebf
+item:
+  id: 6e916aaa-2598-4377-8dc5-982e2fb5b64b
+  name: Servicio estados 101
+  folders:
+    - Servicios de prueba
+    - Servicio estados 101
+  fullName: Servicios de prueba / Servicio estados 101
+  parent:
+    id: a076b1d5-8de6-45a0-b11c-b3fb3e91b4ee
+    name: Servicios de prueba
+    folders:
+      - Servicios de prueba
+request:
+  method: GET
+  url:
+    protocol: http
+    port: '8092'
+    path:
+      - estados
+      - '101'
+    host:
+      - '127'
+      - '0'
+      - '0'
+      - '1'
+    query: []
+    variable: []
+  headers:
+    - key: User-Agent
+      value: PostmanRuntime/7.56.2
+      system: true
+    - key: Accept
+      value: '*/*'
+      system: true
+    - key: Cache-Control
+      value: no-cache
+      system: true
+    - key: Postman-Token
+      value: 2712e8d0-e2bb-4801-9dc2-21b553a09ec4
+      system: true
+    - key: Host
+      value: 127.0.0.1:8092
+      system: true
+    - key: Accept-Encoding
+      value: gzip, deflate, br
+      system: true
+    - key: Connection
+      value: keep-alive
+      system: true
+response:
+  id: 909d20a7-a84c-4aa7-a27d-a6c6058ba62e
+  code: 200
+  status: OK
+  responseTime: 11
+  responseSize: 41
+  headers:
+    - key: Host
+      value: 127.0.0.1:8092
+    - key: Date
+      value: Tue, 17 Nov 2026 14:06:20 GMT
+    - key: Connection
+      value: close
+    - key: X-Powered-By
+      value: PHP/8.4.0
+    - key: Content-Type
+      value: application/json; charset=utf-8
+  body: '{"solicitud_id":101,"estado":"pendiente"}'
+tests:
+  - name: HTTP 200
+    status: passed
+  - name: Estado pendiente
+    status: passed
+errors: []

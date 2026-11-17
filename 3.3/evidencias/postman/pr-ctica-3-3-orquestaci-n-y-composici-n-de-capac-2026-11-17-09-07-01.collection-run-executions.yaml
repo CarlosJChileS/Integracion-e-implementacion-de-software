@@ -1,0 +1,94 @@
+---
+kind: postman-cli-collection-run-executions
+schemaVersion: 1
+runId: a1efbe8c-83c3-4a4f-86df-5af5cc7a99d2
+summaryFile: pr-ctica-3-3-orquestaci-n-y-composici-n-de-capac-2026-11-17-09-07-01.collection-run-summary.yaml
+collection:
+  id: 0e5f01f3-f083-4b2e-a2b4-df9b88252033
+  name: Práctica 3.3 - Orquestación y composición de capacidades
+generatedAt: '2026-11-17T14:07:01.580Z'
+---
+iteration: 0
+cursorRef: 342b9230-f112-436f-8a1e-b1c18dfcdfe9
+item:
+  id: c7b75039-143e-4291-90b0-e619f4a7ecb8
+  name: Fallo servicio de estados
+  folders:
+    - Orquestador
+    - Fallo servicio de estados
+  fullName: Orquestador / Fallo servicio de estados
+  parent:
+    id: a37bc66d-ceb3-41db-a428-a47c6cae5076
+    name: Orquestador
+    folders:
+      - Orquestador
+request:
+  method: GET
+  url:
+    protocol: http
+    port: '8000'
+    path:
+      - api
+      - resumen-solicitud
+      - '101'
+    host:
+      - '127'
+      - '0'
+      - '0'
+      - '1'
+    query: []
+    variable: []
+  headers:
+    - key: X-Correlation-ID
+      value: practica33-postman-fail-01
+    - key: User-Agent
+      value: PostmanRuntime/7.56.2
+      system: true
+    - key: Accept
+      value: '*/*'
+      system: true
+    - key: Cache-Control
+      value: no-cache
+      system: true
+    - key: Postman-Token
+      value: 31f7c411-6ab1-4386-9b57-bf7a964a0244
+      system: true
+    - key: Host
+      value: 127.0.0.1:8000
+      system: true
+    - key: Accept-Encoding
+      value: gzip, deflate, br
+      system: true
+    - key: Connection
+      value: keep-alive
+      system: true
+response:
+  id: 6c55f13e-66e3-47cd-9737-6ba880a80f20
+  code: 502
+  status: Bad Gateway
+  responseTime: 2137
+  responseSize: 112
+  headers:
+    - key: Host
+      value: 127.0.0.1:8000
+    - key: Connection
+      value: close
+    - key: X-Powered-By
+      value: PHP/8.4.0
+    - key: Cache-Control
+      value: no-cache, private
+    - key: Date
+      value: Tue, 17 Nov 2026 14:07:03 GMT
+    - key: Content-Type
+      value: application/json
+    - key: X-Correlation-ID
+      value: practica33-postman-fail-01
+    - key: Access-Control-Allow-Origin
+      value: '*'
+  body: '{"mensaje":"No fue posible completar el resumen de la solicitud.","correlation_id":"practica33-postman-fail-01"}'
+tests:
+  - name: HTTP 502 controlado
+    status: passed
+  - name: Mensaje sin traza y correlación
+    status: passed
+errors: []
