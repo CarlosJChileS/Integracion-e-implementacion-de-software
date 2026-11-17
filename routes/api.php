@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\EnrollmentController;
 use App\Http\Controllers\Api\NormalizeEnrollmentPayloadController;
+use App\Http\Controllers\Api\SolicitudSummaryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,5 @@ Route::middleware('auth:sanctum')->controller(EnrollmentController::class)->grou
 
 Route::post('/integrations/enrollments/normalize', NormalizeEnrollmentPayloadController::class)
     ->middleware('auth:sanctum');
+
+Route::get('/resumen-solicitud/{solicitudId}', SolicitudSummaryController::class)->whereNumber('solicitudId');

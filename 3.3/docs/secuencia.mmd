@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente / Postman
+    participant O as Orquestador Laravel
+    participant U as Servicio usuarios
+    participant E as Servicio estados
+    participant L as Laravel log
+    C->>O: GET /api/resumen-solicitud/101 + X-Correlation-ID
+    Note over O: Propaga ID recibido o genera UUID
+    O->>U: GET /usuarios/7 + X-Correlation-ID
+    U-->>O: 200 {id: 7, nombre: Ana}
+    O->>E: GET /estados/101 + X-Correlation-ID
+    alt Ambos servicios responden 2xx con datos válidos
+        E-->>O: 200 {solicitud_id: 101, estado: pendiente}
+        O-->>C: 200 JSON unificado + X-Correlation-ID
+    else Servicio falla o no responde dentro de 3 s
+        E--xO: Estado HTTP no exitoso o conexión/timeout
+        O->>L: warning con servicio, motivo y correlation_id
+        O-->>C: 502 JSON controlado + X-Correlation-ID
+    end

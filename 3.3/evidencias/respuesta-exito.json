@@ -1,0 +1,23 @@
+{
+  "users_service": {
+    "id": 7,
+    "nombre": "Ana"
+  },
+  "states_service": {
+    "solicitud_id": 101,
+    "estado": "pendiente"
+  },
+  "orchestrator_status": 200,
+  "response_header_correlation_id": [
+    "practica33-postman-01"
+  ],
+  "body": {
+    "solicitud_id": 101,
+    "usuario": {
+      "id": 7,
+      "nombre": "Ana"
+    },
+    "estado": "pendiente",
+    "correlation_id": "practica33-postman-01"
+  }
+}

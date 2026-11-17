@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'practica33' => [
+        'users_url' => env('PRACTICA33_USERS_URL', 'http://127.0.0.1:8091'),
+        'states_url' => env('PRACTICA33_STATES_URL', 'http://127.0.0.1:8092'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],

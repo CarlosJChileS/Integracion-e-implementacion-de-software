@@ -1,0 +1,12 @@
+{
+  "method": "GET",
+  "url": "/api/resumen-solicitud/101",
+  "status": 502,
+  "response_header_correlation_id": [
+    "practica33-postman-fail-01"
+  ],
+  "body": {
+    "mensaje": "No fue posible completar el resumen de la solicitud.",
+    "correlation_id": "practica33-postman-fail-01"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "info": {
+    "_postman_id": "0e5f01f3-f083-4b2e-a2b4-df9b88252033",
+    "name": "Práctica 3.3 - Orquestación y composición de capacidades",
+    "description": "Laboratorio ILIA con servicios locales de usuarios y estados. Para el caso fallido, detener el proceso de estados en 127.0.0.1:8092 antes de enviar la petición.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Servicios de prueba",
+      "item": [
+        {
+          "name": "Servicio usuarios 7",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{users_url}}/usuarios/7"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('JSON de Ana', () => pm.expect(pm.response.json()).to.eql({id: 7, nombre: 'Ana'}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Servicio estados 101",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{states_url}}/estados/101"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Estado pendiente', () => pm.expect(pm.response.json()).to.eql({solicitud_id: 101, estado: 'pendiente'}));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Orquestador",
+      "item": [
+        {
+          "name": "Flujo normal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Correlation-ID",
+                "value": "{{correlation_id}}"
+              }
+            ],
+            "url": "{{orchestrator_url}}/api/resumen-solicitud/101"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('Resumen unificado', () => { pm.expect(body.solicitud_id).to.eql(101); pm.expect(body.usuario).to.eql({id: 7, nombre: 'Ana'}); pm.expect(body.estado).to.eql('pendiente'); });",
+                  "pm.test('ID correlacionado en cuerpo y cabecera', () => { pm.expect(body.correlation_id).to.eql(pm.variables.get('correlation_id')); pm.expect(pm.response.headers.get('X-Correlation-ID')).to.eql(body.correlation_id); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Fallo servicio de estados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Correlation-ID",
+                "value": "{{failure_correlation_id}}"
+              }
+            ],
+            "url": "{{orchestrator_url}}/api/resumen-solicitud/101",
+            "description": "Detén el proceso PHP del servicio estados en el puerto 8092 antes de enviar esta petición. Luego revisa storage/logs/laravel.log con el correlation_id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 502 controlado', () => pm.response.to.have.status(502));",
+                  "const body = pm.response.json();",
+                  "pm.test('Mensaje sin traza y correlación', () => { pm.expect(body.mensaje).to.eql('No fue posible completar el resumen de la solicitud.'); pm.expect(body.correlation_id).to.eql(pm.variables.get('failure_correlation_id')); pm.expect(pm.response.headers.get('X-Correlation-ID')).to.eql(body.correlation_id); pm.expect(pm.response.text()).not.to.include('ConnectionException'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "users_url",
+      "value": "http://127.0.0.1:8091"
+    },
+    {
+      "key": "states_url",
+      "value": "http://127.0.0.1:8092"
+    },
+    {
+      "key": "orchestrator_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "correlation_id",
+      "value": "practica33-postman-01"
+    },
+    {
+      "key": "failure_correlation_id",
+      "value": "practica33-postman-fail-01"
+    }
+  ]
+}
