@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\NormalizeEnrollmentPayloadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,6 @@ Route::middleware('auth:sanctum')->controller(EnrollmentController::class)->grou
     Route::patch('/enrollments/{enrollment}', 'update');
     Route::delete('/enrollments/{enrollment}', 'destroy');
 });
+
+Route::post('/integrations/enrollments/normalize', NormalizeEnrollmentPayloadController::class)
+    ->middleware('auth:sanctum');

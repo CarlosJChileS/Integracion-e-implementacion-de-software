@@ -12,12 +12,13 @@ Repositorio organizado siguiendo la secuencia de contenidos de la asignatura. Lo
 | [`1.4`](1.4/README.md) | Arquitectura distribuida y modelos desacoplados | Límites entre cliente, API, servicios y base de datos. |
 | [`2.1`](2.1/README.md) | Integración en la capa de datos | Migraciones, persistencia y material de arquitectura/conectividad. |
 | [`2.2`](2.2/README.md) | DTO y contratos de intercambio JSON | Guía, informe, contrato, colección Postman y evidencias de la práctica. |
+| [`2.3`](2.3/README.md) | Patrones de traducción y normalización | Adaptador individual de Carlos Chile para convertir dos formatos de inscripción al DTO común. |
 
 Cada carpeta explica cómo su tema prepara el siguiente. La implementación común se mantiene en este directorio raíz para que las prácticas puedan referirse al mismo sistema.
 
 ## Proyecto Laravel (raíz)
 
-API de inscripción a cursos del proyecto ILIA. Usa Laravel 13 y PHP 8.3 o superior. El archivo `.env.example` conserva SQLite para una ejecución local sencilla; la instancia desplegada en la VM Ubuntu utiliza PostgreSQL. La carpeta `2.2` documenta la práctica correspondiente; el código no está duplicado dentro de ella.
+API de inscripción a cursos del proyecto ILIA. Usa Laravel 13 y PHP 8.3 o superior. El archivo `.env.example` conserva SQLite para una ejecución local sencilla; la instancia desplegada en la VM Ubuntu utiliza PostgreSQL. Las carpetas `2.2` y `2.3` documentan sus prácticas; el código común permanece en la raíz.
 
 ### Ejecución local con SQLite
 
@@ -40,4 +41,4 @@ La VM `Integracion Ubuntu PostgreSQL` ejecuta una copia de este mismo repositori
 
 La cuenta de PostgreSQL es `laravel_app`. Las contraseñas se entregan por separado y no se guardan en este repositorio. Para consultar el estado de los servicios dentro de Ubuntu, usa `sudo systemctl status laravel-integracion postgresql`.
 
-La conexión Laravel–PostgreSQL se preparó con `composer install`, `php artisan migrate --seed --force` y se comprobó con `php artisan db:show --counts`. La práctica 2.1 reúne la arquitectura y sus evidencias; la práctica 2.2 documenta el contrato JSON y sus validaciones.
+La conexión Laravel–PostgreSQL se preparó con `composer install`, `php artisan migrate --seed --force` y se comprobó con `php artisan db:show --counts`. La práctica 2.1 reúne la arquitectura y sus evidencias; la práctica 2.2 documenta el contrato JSON y sus validaciones; la 2.3 incorpora el traductor de estructuras de inscripción.
