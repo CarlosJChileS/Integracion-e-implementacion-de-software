@@ -5,10 +5,14 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
-from reportlab.platypus import Flowable, PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import Flowable, Image as ReportLabImage, PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.pdfgen import canvas as pdf_canvas
+from pypdf import PdfReader, PdfWriter
 
 BASE = Path(__file__).parent
 OUT = BASE / 'entrega' / 'Informe_Practica_3_2.pdf'
+BODY = OUT.with_name('Informe_Practica_3_2_body_tmp.pdf')
+OUT_SIZE = A4
 OUT.parent.mkdir(parents=True, exist_ok=True)
 P = getSampleStyleSheet()
 P.add(ParagraphStyle(name='TitleX', parent=P['Title'], fontName='Helvetica-Bold', fontSize=25, leading=30, textColor=colors.HexColor('#173C3A'), alignment=TA_LEFT, spaceAfter=10))
@@ -24,7 +28,7 @@ def footer(canvas, doc):
     canvas.setFont('Helvetica', 8)
     canvas.setFillColor(colors.HexColor('#65776F'))
     canvas.drawString(18 * mm, 9 * mm, 'Práctica 3.2 · Enrutamiento y filtrado')
-    canvas.drawRightString(192 * mm, 9 * mm, str(doc.page))
+    canvas.drawRightString(192 * mm, 9 * mm, str(doc.page + 1))
     canvas.restoreState()
 
 
@@ -43,15 +47,15 @@ story = [
     Paragraph('Tabla de reglas', P['HeadX']),
 ]
 rows = [
-    ['Condición', 'Destino / decisión'],
-    ['enrollment.created · prioridad normal o alta', 'inscripciones · consume'],
-    ['Cualquier tipo · prioridad baja', 'filtrado antes del router; sin destino ni consumidor'],
-    ['enrollment.updated', 'actualizaciones · consume'],
-    ['enrollment.cancelled', 'cancelaciones · consume'],
-    ['Tipo fuera del catálogo', 'no_enrutables · se registra y responde 202'],
-    ['Campo requerido ausente o inválido', 'ningún destino · respuesta 422'],
+    ['Condición', 'Destino / decisión', 'Justificación'],
+    ['created · prioridad normal/alta', 'inscripciones', 'Crear inscripción al curso del evento.'],
+    ['Cualquier tipo · prioridad baja', 'filtrados antes del router', 'No cumple la admisión; no llega a consumidor.'],
+    ['updated · prioridad normal/alta', 'actualizaciones', 'Actualizar inscripción propia.'],
+    ['cancelled · prioridad normal/alta', 'cancelaciones', 'Cancelar inscripción propia.'],
+    ['Tipo desconocido · normal/alta', 'no_enrutables · HTTP 202', 'Registrar para revisión sin descartarlo.'],
+    ['Campo requerido ausente/inválido', 'sin destino · HTTP 422', 'Validar antes de filtrar y enrutar.'],
 ]
-table = Table([[Paragraph(str(cell), P['SmallX']) for cell in row] for row in rows], colWidths=[79 * mm, 91 * mm], repeatRows=1)
+table = Table([[Paragraph(str(cell), P['SmallX']) for cell in row] for row in rows], colWidths=[49 * mm, 55 * mm, 66 * mm], repeatRows=1)
 table.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#173C3A')),('TEXTCOLOR',(0,0),(-1,0),colors.white),('FONTNAME',(0,0),(-1,0),'Helvetica-Bold'),('GRID',(0,0),(-1,-1),0.4,colors.HexColor('#D6DED8')),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#F3F5F1')]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5)]))
 story += [table, PageBreak(), Paragraph('Flujo y pruebas', P['HeadX']), Paragraph('El productor envía el evento a la API protegida con Sanctum. Tras validar el contrato, Message Filter detiene la prioridad baja; si pasa, Content-Based Router elige al consumidor o marca el evento como no_enrutable. Las decisiones se correlacionan y se guardan en Laravel log.', P['BodyX'])]
 cases = [
@@ -123,7 +127,38 @@ class MessageFlow(Flowable):
         arrow(405, 16, 237, 16)
 
 
-story += [Paragraph('Implementación y flujo', P['HeadX']), Paragraph('La API llama a EnrollmentService desde tres clases consumidoras: EnrollmentCreatedConsumer, EnrollmentUpdatedConsumer y EnrollmentCancelledConsumer. El siguiente flujo refleja el orden implementado; el diagrama Mermaid queda disponible para editar.', P['BodyX']), MessageFlow(), Paragraph('Conclusión individual', P['HeadX']), Paragraph('Enrutar elige un consumidor según el tipo del mensaje; filtrar detiene mensajes de prioridad baja antes de seleccionar un destino. Los consumidores crean, actualizan o cancelan inscripciones reales del usuario autenticado. Los tipos no reconocidos quedan registrados como no_enrutables. No hay broker: las clases Laravel procesan los mensajes de forma sincrónica.', P['BodyX'])]
-doc = SimpleDocTemplate(str(OUT), pagesize=A4, leftMargin=18 * mm, rightMargin=18 * mm, topMargin=15 * mm, bottomMargin=20 * mm, title='Práctica 3.2 patrones de enrutamiento y filtrado', author='Carlos Chile')
+story += [Paragraph('Implementación y flujo', P['HeadX']), Paragraph('El código individual incluye el router EnrollmentEventRouter, el filtro EnrollmentEventFilter y tres consumidores: EnrollmentCreatedConsumer, EnrollmentUpdatedConsumer y EnrollmentCancelledConsumer. Estos llaman a EnrollmentService. El código y la prueba funcional se adjuntan en el ZIP y están disponibles en el <link href="https://github.com/CarlosJChileS/Integracion-e-implementacion-de-software/tree/main/3.2" color="#28645a">repositorio del proyecto</link>. El siguiente flujo refleja el orden implementado; el diagrama Mermaid queda disponible para editar.', P['BodyX']), MessageFlow(), Paragraph('Conclusión individual', P['HeadX']), Paragraph('Enrutar selecciona un consumidor por tipo; filtrar detiene prioridad baja antes de enrutar. Los consumidores ejecutan operaciones reales sobre inscripciones del usuario autenticado. Los tipos desconocidos se registran como no_enrutables. No hay broker ni cola real: las clases Laravel simulan la entrega y procesan sincrónicamente.', P['BodyX']), PageBreak(), Paragraph('Evidencias de las pruebas', P['HeadX']), Paragraph('Las siguientes capturas proceden de Postman CLI contra la API Laravel y muestran la solicitud, respuesta HTTP y traza del servidor para cada caso obligatorio.', P['BodyX'])]
+for index, label in enumerate(['Creación', 'Actualización', 'Cancelación', 'Tipo desconocido', 'Prioridad baja filtrada', 'Campo obligatorio ausente'], start=1):
+    if index > 1:
+        story.append(PageBreak())
+    story.append(Paragraph(f'Caso {index:02d} · {label}', P['HeadX']))
+    image_path = BASE / 'evidencias' / 'postman' / f'{index:02d}-captura.png'
+    evidence_image = ReportLabImage(str(image_path))
+    evidence_image._restrictSize(174 * mm, 225 * mm)
+    story.append(evidence_image)
+doc = SimpleDocTemplate(str(BODY), pagesize=OUT_SIZE, leftMargin=18 * mm, rightMargin=18 * mm, topMargin=15 * mm, bottomMargin=20 * mm, title='Práctica 3.2 patrones de enrutamiento y filtrado', author='Carlos Chile')
 doc.build(story, onFirstPage=footer, onLaterPages=footer)
+
+cover_path = BASE / 'assets' / 'Caratula_base_institucional.png'
+cover_pdf = OUT.with_name('Informe_Practica_3_2_cover_tmp.pdf')
+cover_canvas = pdf_canvas.Canvas(str(cover_pdf), pagesize=OUT_SIZE)
+page_width, page_height = OUT_SIZE
+cover_canvas.drawImage(str(cover_path), 0, 0, width=page_width, height=page_height)
+cover_canvas.setFillColor(colors.HexColor('#29353A'))
+cover_canvas.setFont('Helvetica-Bold', 17)
+cover_canvas.drawCentredString(page_width / 2, page_height - 205, 'Práctica 3.2')
+cover_canvas.setFont('Helvetica-Bold', 19)
+cover_canvas.drawCentredString(page_width / 2, page_height - 232, 'Patrones de enrutamiento y distribución')
+cover_canvas.drawCentredString(page_width / 2, page_height - 255, 'lógica')
+
+cover_canvas.save()
+
+writer = PdfWriter()
+for source in (cover_pdf, BODY):
+    for page in PdfReader(str(source)).pages:
+        writer.add_page(page)
+with OUT.open('wb') as result:
+    writer.write(result)
+BODY.unlink()
+cover_pdf.unlink()
 print(OUT)
