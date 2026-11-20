@@ -2,25 +2,26 @@
 
 namespace App\Services\EnrollmentEvents;
 
-use Illuminate\Support\Facades\Log;
+use App\Services\EnrollmentService;
 
 class EnrollmentEventConsumer
 {
-    /**
-     * @param array<string, mixed> $message
-     * @return array{destination: string, status: string, event_id: string, correlation_id: string}
+    public function __construct(
+        private readonly EnrollmentCreatedConsumer $created,
+        private readonly EnrollmentUpdatedConsumer $updated,
+        private readonly EnrollmentCancelledConsumer $cancelled,
+        private readonly EnrollmentService $enrollments,
+    ) {}
+
+    /** @param array<string, mixed> $message
+     * @return array{action: string, enrollment_id: string, course_slug?: string}
      */
-    public function consume(string $destination, array $message): array
+    public function consume(string $destination, string $userId, array $message): array
     {
-        $result = [
-            'destination' => $destination,
-            'status' => 'consumido',
-            'event_id' => $message['id'],
-            'correlation_id' => $message['correlation_id'],
-        ];
-
-        Log::info('message_consumer.processed', $result + ['type' => $message['type']]);
-
-        return $result;
+        return match ($destination) {
+            'inscripciones' => $this->created->consume($userId, $message, $this->enrollments),
+            'actualizaciones' => $this->updated->consume($userId, $message, $this->enrollments),
+            'cancelaciones' => $this->cancelled->consume($userId, $message, $this->enrollments),
+        };
     }
 }

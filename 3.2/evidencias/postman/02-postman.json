@@ -1,0 +1,66 @@
+{
+  "caso": "02 - Actualizada: consumidor actualizaciones",
+  "metodo": "POST",
+  "endpoint": "/api/enrollment-events",
+  "solicitud": {
+    "id": "33333333-3333-4333-8333-333333333333",
+    "type": "enrollment.updated",
+    "priority": "normal",
+    "data": {
+      "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+      "course_slug": "notebooklm-en-el-aula"
+    }
+  },
+  "status_http": 200,
+  "respuesta": {
+    "destination": "actualizaciones",
+    "status": "consumido",
+    "event_id": "33333333-3333-4333-8333-333333333333",
+    "correlation_id": "practica-32-final-02",
+    "effect": {
+      "action": "updated",
+      "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+      "course_slug": "notebooklm-en-el-aula"
+    }
+  },
+  "correlation_id": "practica-32-final-02",
+  "resultado_assertion_postman": [
+    {
+      "name": "HTTP 200 y actualización real",
+      "status": "passed"
+    }
+  ],
+  "efecto_consumidor": {
+    "action": "updated",
+    "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+    "course_slug": "notebooklm-en-el-aula"
+  },
+  "trazas_servidor": [
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "INFO",
+      "event": "message_router.decided",
+      "context": {
+        "event_id": "33333333-3333-4333-8333-333333333333",
+        "correlation_id": "practica-32-final-02",
+        "type": "enrollment.updated",
+        "destination": "actualizaciones"
+      }
+    },
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "INFO",
+      "event": "message_consumer.processed",
+      "context": {
+        "action": "updated",
+        "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+        "course_slug": "notebooklm-en-el-aula",
+        "consumer": "actualizaciones",
+        "event_id": "33333333-3333-4333-8333-333333333333",
+        "correlation_id": "practica-32-final-02"
+      }
+    }
+  ],
+  "verificacion": "OK",
+  "origen": "Postman CLI 1.90.0 contra Laravel local y SQLite; token eliminado del artefacto."
+}

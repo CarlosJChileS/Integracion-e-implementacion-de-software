@@ -3,12 +3,12 @@ flowchart TD
     B --> C{Sanctum y validación del contrato}
     C -->|No autorizado| X[401]
     C -->|Faltan campos| Y[422; no se enruta]
-    C -->|Válido: id, type, priority, data| D[Content-Based Router: inspecciona type]
-    D -->|enrollment.created| E{Message Filter: priority}
-    E -->|normal o alta| F[Consumidor simulado: inscripciones]
+    C -->|Válido: id, type, priority, data| E{Message Filter: priority}
+    E -->|normal o alta| D[Content-Based Router: inspecciona type]
     E -->|baja| G[Rechazado; log notice]
-    D -->|enrollment.updated| H[Consumidor simulado: actualizaciones]
-    D -->|enrollment.cancelled| I[Consumidor simulado: cancelaciones]
+    D -->|enrollment.created| F[Consumidor: inscripciones]
+    D -->|enrollment.updated| H[Consumidor: actualizaciones]
+    D -->|enrollment.cancelled| I[Consumidor: cancelaciones]
     D -->|Tipo desconocido| J[no_enrutables; log warning; HTTP 202]
     F --> K[Respuesta JSON y correlation_id]
     H --> K

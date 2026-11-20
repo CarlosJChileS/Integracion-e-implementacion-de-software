@@ -16,8 +16,15 @@
         "destination": "no_enrutables",
         "status": "no_enrutable",
         "reason": "No existe una regla para este tipo de evento.",
-        "correlation_id": "96550305-d057-4084-a1b5-f8fdef9ada3b"
+        "correlation_id": "practica-32-desconocido"
     },
+    "traza_verificada": {
+        "event": "message_router.unroutable",
+        "destination": "no_enrutables",
+        "effect": "No se llamó ningún consumidor; evento registrado para revisión."
+    },
+    "correlation_id": "practica-32-desconocido",
+    "evidencia_consumidor": null,
     "verificacion": "OK",
-    "ejecucion": "Cliente HTTP de pruebas de Laravel: middleware, validación, controlador y servicios reales."
+    "ejecucion": "Cliente HTTP de pruebas de Laravel con Sanctum, base SQLite temporal y EnrollmentService real."
 }

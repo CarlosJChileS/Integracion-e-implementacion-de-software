@@ -1,0 +1,56 @@
+{
+  "caso": "04 - Tipo desconocido: no_enrutables",
+  "metodo": "POST",
+  "endpoint": "/api/enrollment-events",
+  "solicitud": {
+    "id": "55555555-5555-4555-8555-555555555555",
+    "type": "enrollment.archived",
+    "priority": "normal",
+    "data": {
+      "source": "practica-3.2"
+    }
+  },
+  "status_http": 202,
+  "respuesta": {
+    "event_id": "55555555-5555-4555-8555-555555555555",
+    "type": "enrollment.archived",
+    "destination": "no_enrutables",
+    "status": "no_enrutable",
+    "reason": "No existe una regla para este tipo de evento.",
+    "correlation_id": "practica-32-final-04"
+  },
+  "correlation_id": "practica-32-final-04",
+  "resultado_assertion_postman": [
+    {
+      "name": "HTTP 202 y tipo no descartado",
+      "status": "passed"
+    }
+  ],
+  "efecto_consumidor": null,
+  "trazas_servidor": [
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "INFO",
+      "event": "message_router.decided",
+      "context": {
+        "event_id": "55555555-5555-4555-8555-555555555555",
+        "correlation_id": "practica-32-final-04",
+        "type": "enrollment.archived",
+        "destination": "no_enrutables"
+      }
+    },
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "WARNING",
+      "event": "message_router.unroutable",
+      "context": {
+        "event_id": "55555555-5555-4555-8555-555555555555",
+        "correlation_id": "practica-32-final-04",
+        "type": "enrollment.archived",
+        "destination": "no_enrutables"
+      }
+    }
+  ],
+  "verificacion": "OK",
+  "origen": "Postman CLI 1.90.0 contra Laravel local y SQLite; token eliminado del artefacto."
+}

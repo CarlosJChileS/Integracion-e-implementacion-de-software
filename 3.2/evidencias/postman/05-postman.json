@@ -1,0 +1,45 @@
+{
+  "caso": "05 - Prioridad baja: filtrado",
+  "metodo": "POST",
+  "endpoint": "/api/enrollment-events",
+  "solicitud": {
+    "id": "66666666-6666-4666-8666-666666666666",
+    "type": "enrollment.created",
+    "priority": "baja",
+    "data": {
+      "course_slug": "prompting-para-docentes"
+    }
+  },
+  "status_http": 200,
+  "respuesta": {
+    "event_id": "66666666-6666-4666-8666-666666666666",
+    "type": "enrollment.created",
+    "destination": "filtrados",
+    "status": "filtrado",
+    "reason": "La prioridad baja no supera el filtro de admisión.",
+    "correlation_id": "practica-32-final-05"
+  },
+  "correlation_id": "practica-32-final-05",
+  "resultado_assertion_postman": [
+    {
+      "name": "HTTP 200 pero no ejecuta consumidor",
+      "status": "passed"
+    }
+  ],
+  "efecto_consumidor": null,
+  "trazas_servidor": [
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "NOTICE",
+      "event": "message_filter.rejected",
+      "context": {
+        "event_id": "66666666-6666-4666-8666-666666666666",
+        "correlation_id": "practica-32-final-05",
+        "type": "enrollment.created",
+        "reason": "La prioridad baja no supera el filtro de admisión."
+      }
+    }
+  ],
+  "verificacion": "OK",
+  "origen": "Postman CLI 1.90.0 contra Laravel local y SQLite; token eliminado del artefacto."
+}

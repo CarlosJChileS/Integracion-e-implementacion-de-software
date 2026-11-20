@@ -1,0 +1,9 @@
+{
+  "herramienta": "Postman CLI 1.90.0",
+  "servidor": "Laravel local sobre SQLite aislada",
+  "peticiones": 6,
+  "assertions_aprobadas": 6,
+  "casos_aprobados": 6,
+  "casos_totales": 6,
+  "credenciales_incluidas": false
+}

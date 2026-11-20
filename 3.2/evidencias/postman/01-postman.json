@@ -1,0 +1,65 @@
+{
+  "caso": "01 - Creada: consumidor inscripciones",
+  "metodo": "POST",
+  "endpoint": "/api/enrollment-events",
+  "solicitud": {
+    "id": "11111111-1111-4111-8111-111111111111",
+    "type": "enrollment.created",
+    "priority": "normal",
+    "data": {
+      "course_slug": "prompting-para-docentes"
+    }
+  },
+  "status_http": 200,
+  "respuesta": {
+    "destination": "inscripciones",
+    "status": "consumido",
+    "event_id": "11111111-1111-4111-8111-111111111111",
+    "correlation_id": "practica-32-final-01",
+    "effect": {
+      "action": "created",
+      "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+      "course_slug": "prompting-para-docentes"
+    }
+  },
+  "correlation_id": "practica-32-final-01",
+  "resultado_assertion_postman": [
+    {
+      "name": "HTTP 200 y consumidor de inscripciones",
+      "status": "passed"
+    }
+  ],
+  "efecto_consumidor": {
+    "action": "created",
+    "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+    "course_slug": "prompting-para-docentes"
+  },
+  "trazas_servidor": [
+    {
+      "timestamp": "2026-11-20 23:04:16",
+      "level": "INFO",
+      "event": "message_router.decided",
+      "context": {
+        "event_id": "11111111-1111-4111-8111-111111111111",
+        "correlation_id": "practica-32-final-01",
+        "type": "enrollment.created",
+        "destination": "inscripciones"
+      }
+    },
+    {
+      "timestamp": "2026-11-20 23:04:16",
+      "level": "INFO",
+      "event": "message_consumer.processed",
+      "context": {
+        "action": "created",
+        "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+        "course_slug": "prompting-para-docentes",
+        "consumer": "inscripciones",
+        "event_id": "11111111-1111-4111-8111-111111111111",
+        "correlation_id": "practica-32-final-01"
+      }
+    }
+  ],
+  "verificacion": "OK",
+  "origen": "Postman CLI 1.90.0 contra Laravel local y SQLite; token eliminado del artefacto."
+}

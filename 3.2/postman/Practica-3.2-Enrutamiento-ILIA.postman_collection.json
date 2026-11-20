@@ -6,40 +6,266 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "base_url", "value": "http://127.0.0.1:8000" },
-    { "key": "token", "value": "" },
-    { "key": "correlation_id", "value": "practica-32-caso" }
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "correlation_id",
+      "value": "practica-32-caso"
+    }
   ],
   "item": [
     {
       "name": "01 - Creada: consumidor inscripciones",
-      "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"X-Correlation-ID","value":"{{correlation_id}}-01"}], "body": {"mode":"raw","raw":"{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.created\",\n  \"priority\": \"normal\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\",\n    \"course_slug\": \"prompting-para-docentes\"\n  }\n}","options":{"raw":{"language":"json"}}}, "url":"{{base_url}}/api/enrollment-events"},
-      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200 y consumidor de inscripciones', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().destination).to.eql('inscripciones'); pm.expect(pm.response.json().status).to.eql('consumido'); });"]}}]
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-ID",
+            "value": "{{correlation_id}}-01"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.created\",\n  \"priority\": \"normal\",\n  \"data\": { \"course_slug\": \"prompting-para-docentes\" }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/api/enrollment-events"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 y consumidor de inscripciones', () => { pm.response.to.have.status(200); const body = pm.response.json(); pm.expect(body.destination).to.eql('inscripciones'); pm.expect(body.status).to.eql('consumido'); pm.expect(body.effect.action).to.eql('created'); pm.expect(body.effect.enrollment_id).to.be.a('string'); });",
+              "pm.collectionVariables.set('enrollment_id', pm.response.json().effect.enrollment_id);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "02 - Actualizada: consumidor actualizaciones",
-      "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"X-Correlation-ID","value":"{{correlation_id}}-02"}], "body": {"mode":"raw","raw":"{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.updated\",\n  \"priority\": \"normal\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\",\n    \"course_slug\": \"prompting-para-docentes\"\n  }\n}","options":{"raw":{"language":"json"}}}, "url":"{{base_url}}/api/enrollment-events"},
-      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200 y consumidor de actualizaciones', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().destination).to.eql('actualizaciones'); pm.expect(pm.response.json().status).to.eql('consumido'); });"]}}]
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-ID",
+            "value": "{{correlation_id}}-02"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"33333333-3333-4333-8333-333333333333\",\n  \"type\": \"enrollment.updated\",\n  \"priority\": \"normal\",\n  \"data\": { \"enrollment_id\": \"{{enrollment_id}}\", \"course_slug\": \"notebooklm-en-el-aula\" }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/api/enrollment-events"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 y actualización real', () => { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.destination).to.eql('actualizaciones'); pm.expect(body.effect.action).to.eql('updated'); pm.expect(body.effect.enrollment_id).to.eql(pm.collectionVariables.get('enrollment_id')); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "03 - Cancelada: consumidor cancelaciones",
-      "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"X-Correlation-ID","value":"{{correlation_id}}-03"}], "body": {"mode":"raw","raw":"{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.cancelled\",\n  \"priority\": \"normal\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\",\n    \"course_slug\": \"prompting-para-docentes\"\n  }\n}","options":{"raw":{"language":"json"}}}, "url":"{{base_url}}/api/enrollment-events"},
-      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200 y consumidor de cancelaciones', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().destination).to.eql('cancelaciones'); pm.expect(pm.response.json().status).to.eql('consumido'); });"]}}]
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-ID",
+            "value": "{{correlation_id}}-03"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"44444444-4444-4444-8444-444444444444\",\n  \"type\": \"enrollment.cancelled\",\n  \"priority\": \"normal\",\n  \"data\": { \"enrollment_id\": \"{{enrollment_id}}\" }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/api/enrollment-events"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 y cancelación real', () => { const body = pm.response.json(); pm.response.to.have.status(200); pm.expect(body.destination).to.eql('cancelaciones'); pm.expect(body.effect.action).to.eql('cancelled'); pm.expect(body.effect.enrollment_id).to.eql(pm.collectionVariables.get('enrollment_id')); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "04 - Tipo desconocido: no_enrutables",
-      "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"X-Correlation-ID","value":"{{correlation_id}}-04"}], "body": {"mode":"raw","raw":"{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.archived\",\n  \"priority\": \"normal\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\",\n    \"course_slug\": \"prompting-para-docentes\"\n  }\n}","options":{"raw":{"language":"json"}}}, "url":"{{base_url}}/api/enrollment-events"},
-      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 202 y tipo no descartado', () => { pm.response.to.have.status(202); pm.expect(pm.response.json().destination).to.eql('no_enrutables'); pm.expect(pm.response.json().status).to.eql('no_enrutable'); });"]}}]
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-ID",
+            "value": "{{correlation_id}}-04"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"55555555-5555-4555-8555-555555555555\",\n  \"type\": \"enrollment.archived\",\n  \"priority\": \"normal\",\n  \"data\": { \"source\": \"practica-3.2\" }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/api/enrollment-events"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 202 y tipo no descartado', () => { pm.response.to.have.status(202); pm.expect(pm.response.json().destination).to.eql('no_enrutables'); pm.expect(pm.response.json().status).to.eql('no_enrutable'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "05 - Prioridad baja: filtrado",
-      "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"X-Correlation-ID","value":"{{correlation_id}}-05"}], "body": {"mode":"raw","raw":"{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.created\",\n  \"priority\": \"baja\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\",\n    \"course_slug\": \"prompting-para-docentes\"\n  }\n}","options":{"raw":{"language":"json"}}}, "url":"{{base_url}}/api/enrollment-events"},
-      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200 pero no ejecuta consumidor', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().destination).to.eql('inscripciones'); pm.expect(pm.response.json().status).to.eql('filtrado'); });"]}}]
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-ID",
+            "value": "{{correlation_id}}-05"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"66666666-6666-4666-8666-666666666666\",\n  \"type\": \"enrollment.created\",\n  \"priority\": \"baja\",\n  \"data\": { \"course_slug\": \"prompting-para-docentes\" }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/api/enrollment-events"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 pero no ejecuta consumidor', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().destination).to.eql('filtrados'); pm.expect(pm.response.json().status).to.eql('filtrado'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "06 - Sin campo obligatorio: validación 422",
-      "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"},{"key":"X-Correlation-ID","value":"{{correlation_id}}-06"}], "body": {"mode":"raw","raw":"{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.created\",\n  \"priority\": \"normal\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\"\n  }\n}","options":{"raw":{"language":"json"}}}, "url":"{{base_url}}/api/enrollment-events"},
-      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 422 con campo faltante', () => { pm.response.to.have.status(422); pm.expect(pm.response.json().errors['data.course_slug']).to.be.an('array'); });"]}}]
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Correlation-ID",
+            "value": "{{correlation_id}}-06"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"11111111-1111-4111-8111-111111111111\",\n  \"type\": \"enrollment.created\",\n  \"priority\": \"normal\",\n  \"data\": {\n    \"enrollment_id\": \"22222222-2222-4222-8222-222222222222\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/api/enrollment-events"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 422 con campo faltante', () => { pm.response.to.have.status(422); pm.expect(pm.response.json().errors['data.course_slug']).to.be.an('array'); });"
+            ]
+          }
+        }
+      ]
     }
   ]
 }

@@ -9,8 +9,9 @@
 - [Colección Postman](postman/Practica-3.2-Enrutamiento-ILIA.postman_collection.json).
 - [Diagrama Mermaid](docs/flujo-mensajes.mmd).
 - Seis solicitudes y respuestas JSON verificadas en `evidencias/`.
+- [Seis capturas Postman CLI con respuesta, consumidor y traza](evidencias/postman/).
 - La carpeta `entrega` contiene el PDF final.
 
 ## Resumen
 
-La ruta protegida `POST /api/enrollment-events` valida el contrato del mensaje, preserva o genera `X-Correlation-ID`, filtra eventos de creación de prioridad baja y enruta tres tipos de eventos a consumidores Laravel simulados. No hay broker ni persistencia de los eventos de demostración. Consulte [la guía de ejecución, reglas y componentes](README_IMPLEMENTACION.md).
+La ruta protegida `POST /api/enrollment-events` valida el contrato, filtra prioridad baja antes del router y dirige tres tipos a consumidores Laravel que operan sobre las inscripciones reales del usuario autenticado. Se conservan trazas con `X-Correlation-ID`. No hay broker; los casos de desconocido, filtro y validación no modifican la base. Consulte [la guía de ejecución, reglas y componentes](README_IMPLEMENTACION.md).

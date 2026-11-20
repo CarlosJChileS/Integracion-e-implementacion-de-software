@@ -1,0 +1,62 @@
+{
+  "caso": "03 - Cancelada: consumidor cancelaciones",
+  "metodo": "POST",
+  "endpoint": "/api/enrollment-events",
+  "solicitud": {
+    "id": "44444444-4444-4444-8444-444444444444",
+    "type": "enrollment.cancelled",
+    "priority": "normal",
+    "data": {
+      "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84"
+    }
+  },
+  "status_http": 200,
+  "respuesta": {
+    "destination": "cancelaciones",
+    "status": "consumido",
+    "event_id": "44444444-4444-4444-8444-444444444444",
+    "correlation_id": "practica-32-final-03",
+    "effect": {
+      "action": "cancelled",
+      "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84"
+    }
+  },
+  "correlation_id": "practica-32-final-03",
+  "resultado_assertion_postman": [
+    {
+      "name": "HTTP 200 y cancelación real",
+      "status": "passed"
+    }
+  ],
+  "efecto_consumidor": {
+    "action": "cancelled",
+    "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84"
+  },
+  "trazas_servidor": [
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "INFO",
+      "event": "message_router.decided",
+      "context": {
+        "event_id": "44444444-4444-4444-8444-444444444444",
+        "correlation_id": "practica-32-final-03",
+        "type": "enrollment.cancelled",
+        "destination": "cancelaciones"
+      }
+    },
+    {
+      "timestamp": "2026-11-20 23:04:17",
+      "level": "INFO",
+      "event": "message_consumer.processed",
+      "context": {
+        "action": "cancelled",
+        "enrollment_id": "01a1fb34-1532-7cb4-a67f-5c825e914b84",
+        "consumer": "cancelaciones",
+        "event_id": "44444444-4444-4444-8444-444444444444",
+        "correlation_id": "practica-32-final-03"
+      }
+    }
+  ],
+  "verificacion": "OK",
+  "origen": "Postman CLI 1.90.0 contra Laravel local y SQLite; token eliminado del artefacto."
+}

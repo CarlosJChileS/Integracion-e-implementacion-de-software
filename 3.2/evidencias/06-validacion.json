@@ -17,6 +17,12 @@
             ]
         }
     },
+    "traza_verificada": {
+        "event": "validation.rejected",
+        "effect": "El enrutador y los consumidores no se ejecutaron."
+    },
+    "correlation_id": null,
+    "evidencia_consumidor": null,
     "verificacion": "OK",
-    "ejecucion": "Cliente HTTP de pruebas de Laravel: middleware, validación, controlador y servicios reales."
+    "ejecucion": "Cliente HTTP de pruebas de Laravel con Sanctum, base SQLite temporal y EnrollmentService real."
 }

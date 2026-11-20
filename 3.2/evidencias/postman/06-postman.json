@@ -1,0 +1,33 @@
+{
+  "caso": "06 - Sin campo obligatorio: validación 422",
+  "metodo": "POST",
+  "endpoint": "/api/enrollment-events",
+  "solicitud": {
+    "id": "11111111-1111-4111-8111-111111111111",
+    "type": "enrollment.created",
+    "priority": "normal",
+    "data": {
+      "enrollment_id": "22222222-2222-4222-8222-222222222222"
+    }
+  },
+  "status_http": 422,
+  "respuesta": {
+    "message": "The data.course slug field is required.",
+    "errors": {
+      "data.course_slug": [
+        "The data.course slug field is required."
+      ]
+    }
+  },
+  "correlation_id": "practica-32-final-06",
+  "resultado_assertion_postman": [
+    {
+      "name": "HTTP 422 con campo faltante",
+      "status": "passed"
+    }
+  ],
+  "efecto_consumidor": null,
+  "trazas_servidor": [],
+  "verificacion": "OK",
+  "origen": "Postman CLI 1.90.0 contra Laravel local y SQLite; token eliminado del artefacto."
+}

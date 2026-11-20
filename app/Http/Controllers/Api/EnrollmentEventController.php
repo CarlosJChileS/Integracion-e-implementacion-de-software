@@ -21,6 +21,18 @@ class EnrollmentEventController extends Controller
     ): JsonResponse {
         $message = $request->validated();
         $message['correlation_id'] = $request->header('X-Correlation-ID') ?: (string) Str::uuid();
+
+        if (! $filter->allows($message)) {
+            return response()->json([
+                'event_id' => $message['id'],
+                'type' => $message['type'],
+                'destination' => 'filtrados',
+                'status' => 'filtrado',
+                'reason' => 'La prioridad baja no supera el filtro de admisión.',
+                'correlation_id' => $message['correlation_id'],
+            ], 200)->header('X-Correlation-ID', $message['correlation_id']);
+        }
+
         $destination = $router->destinationFor($message['type']);
         Log::info('message_router.decided', [
             'event_id' => $message['id'],
@@ -47,19 +59,18 @@ class EnrollmentEventController extends Controller
             ], 202)->header('X-Correlation-ID', $message['correlation_id']);
         }
 
-        if (! $filter->allows($destination, $message)) {
-            return response()->json([
-                'event_id' => $message['id'],
-                'type' => $message['type'],
-                'destination' => $destination,
-                'status' => 'filtrado',
-                'reason' => 'La prioridad baja no activa el consumidor de inscripciones.',
-                'correlation_id' => $message['correlation_id'],
-            ], 200)->header('X-Correlation-ID', $message['correlation_id']);
-        }
+        $effect = $consumer->consume(
+            $destination,
+            (string) $request->user()->getAuthIdentifier(),
+            $message,
+        );
 
-        $result = $consumer->consume($destination, $message);
-
-        return response()->json($result, 200)->header('X-Correlation-ID', $message['correlation_id']);
+        return response()->json([
+            'destination' => $destination,
+            'status' => 'consumido',
+            'event_id' => $message['id'],
+            'correlation_id' => $message['correlation_id'],
+            'effect' => $effect,
+        ], 200)->header('X-Correlation-ID', $message['correlation_id']);
     }
 }

@@ -5,7 +5,6 @@
         "type": "enrollment.created",
         "priority": "baja",
         "data": {
-            "enrollment_id": "22222222-2222-4222-8222-222222222222",
             "course_slug": "prompting-para-docentes"
         }
     },
@@ -13,11 +12,18 @@
     "respuesta": {
         "event_id": "11111111-1111-4111-8111-111111111111",
         "type": "enrollment.created",
-        "destination": "inscripciones",
+        "destination": "filtrados",
         "status": "filtrado",
-        "reason": "La prioridad baja no activa el consumidor de inscripciones.",
-        "correlation_id": "2fd38788-0619-42cc-addc-f521e70661d7"
+        "reason": "La prioridad baja no supera el filtro de admisión.",
+        "correlation_id": "practica-32-filtrado"
     },
+    "traza_verificada": {
+        "event": "message_filter.rejected",
+        "destination": "filtrados",
+        "effect": "El filtro rechazó el mensaje; no se creó ninguna inscripción."
+    },
+    "correlation_id": "practica-32-filtrado",
+    "evidencia_consumidor": null,
     "verificacion": "OK",
-    "ejecucion": "Cliente HTTP de pruebas de Laravel: middleware, validación, controlador y servicios reales."
+    "ejecucion": "Cliente HTTP de pruebas de Laravel con Sanctum, base SQLite temporal y EnrollmentService real."
 }
