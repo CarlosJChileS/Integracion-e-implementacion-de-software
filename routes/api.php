@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\EnrollmentEventController;
 use App\Http\Controllers\Api\NormalizeEnrollmentPayloadController;
 use App\Http\Controllers\Api\SolicitudSummaryController;
 use Illuminate\Http\Request;
@@ -17,6 +18,9 @@ Route::middleware('auth:sanctum')->controller(EnrollmentController::class)->grou
     Route::patch('/enrollments/{enrollment}', 'update');
     Route::delete('/enrollments/{enrollment}', 'destroy');
 });
+
+Route::middleware('auth:sanctum')->post('/enrollment-events', EnrollmentEventController::class)
+    ->name('enrollment-events.route');
 
 Route::post('/integrations/enrollments/normalize', NormalizeEnrollmentPayloadController::class)
     ->middleware('auth:sanctum');

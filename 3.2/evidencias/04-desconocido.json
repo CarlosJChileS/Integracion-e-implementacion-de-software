@@ -1,0 +1,23 @@
+{
+    "caso": "04-desconocido",
+    "solicitud": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "type": "enrollment.archived",
+        "priority": "normal",
+        "data": {
+            "enrollment_id": "22222222-2222-4222-8222-222222222222",
+            "course_slug": "prompting-para-docentes"
+        }
+    },
+    "status_http": 202,
+    "respuesta": {
+        "event_id": "11111111-1111-4111-8111-111111111111",
+        "type": "enrollment.archived",
+        "destination": "no_enrutables",
+        "status": "no_enrutable",
+        "reason": "No existe una regla para este tipo de evento.",
+        "correlation_id": "96550305-d057-4084-a1b5-f8fdef9ada3b"
+    },
+    "verificacion": "OK",
+    "ejecucion": "Cliente HTTP de pruebas de Laravel: middleware, validación, controlador y servicios reales."
+}

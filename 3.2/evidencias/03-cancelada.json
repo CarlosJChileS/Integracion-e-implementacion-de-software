@@ -1,0 +1,21 @@
+{
+    "caso": "03-cancelada",
+    "solicitud": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "type": "enrollment.cancelled",
+        "priority": "normal",
+        "data": {
+            "enrollment_id": "22222222-2222-4222-8222-222222222222",
+            "course_slug": "prompting-para-docentes"
+        }
+    },
+    "status_http": 200,
+    "respuesta": {
+        "destination": "cancelaciones",
+        "status": "consumido",
+        "event_id": "11111111-1111-4111-8111-111111111111",
+        "correlation_id": "59da49f7-eef5-4ad2-a31b-a48c658e851e"
+    },
+    "verificacion": "OK",
+    "ejecucion": "Cliente HTTP de pruebas de Laravel: middleware, validación, controlador y servicios reales."
+}
